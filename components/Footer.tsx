@@ -35,7 +35,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/builder"
+                  href="/Pc-Builder"
                   className="hover:opacity-100 transition-opacity"
                 >
                   {t("PC Builder", "بناء الكمبيوتر")}

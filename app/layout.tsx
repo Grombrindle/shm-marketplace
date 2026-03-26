@@ -1,5 +1,6 @@
+import { inter, tajawal } from "./fonts";
 import { Providers } from "./providers";
-import Layout from "../components/Layout";
+import Layout from "@/components/Layout";
 import "./globals.css";
 
 export const metadata = {
@@ -13,9 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      className={`${inter.variable} ${tajawal.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <Providers>
+          {/* LanguageSetter REMOVED to prevent conflict */}
           <Layout>{children}</Layout>
         </Providers>
       </body>

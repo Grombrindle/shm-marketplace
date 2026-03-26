@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* ===== 1. Define custom animations (unchanged) ===== */
 @layer components {
   @keyframes reveal-up {
     from {
@@ -45,9 +46,6 @@
     }
   }
 
-  /* ✅ KEY FIX: animation-fill-mode: backwards */
-  /* Ensures animation starts from "hidden" state ONLY when class is added */
-  /* If class is never added (bfcache), element stays visible by default */
   .animate-reveal-up {
     animation: reveal-up 0.6s ease-out forwards;
     animation-fill-mode: backwards;
@@ -69,6 +67,7 @@
   }
 }
 
+/* ===== 2. Container utility (unchanged) ===== */
 @utility container {
   width: 100%;
   margin-inline: auto;
@@ -88,14 +87,16 @@
   }
 }
 
+/* ===== 3. Theme variables (unchanged except we'll override --font-sans later) ===== */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-sans);          /* ← will be set by us */
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  /* ... rest of your theme variables ... */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -134,6 +135,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ===== 4. Color variables (unchanged) ===== */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -203,6 +205,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ===== 5. Base layer modifications ===== */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -211,6 +214,17 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-sans; /* this uses the --font-sans variable */
   }
+}
+
+/* ===== 6. Font switching based on language ===== */
+/* Set default --font-sans to Inter */
+:root {
+  --font-sans: var(--font-inter);
+}
+
+/* When the html has lang="ar", switch to Tajawal */
+html[lang="ar"] {
+  --font-sans: var(--font-tajawal);
 }

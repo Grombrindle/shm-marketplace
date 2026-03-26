@@ -146,7 +146,7 @@ export default function Home() {
               style={{ animationDelay: "240ms" }}
             >
               <Link
-                href="/builder"
+                href="/Pc-Builder"
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl shadow-elevation-2 hover:bg-primary-container active:scale-[0.97] transition-all"
               >
                 {t("Start Building", "ابدأ البناء")}
@@ -331,7 +331,7 @@ export default function Home() {
                 )}
               </p>
               <Link
-                href="/builder"
+                href="/Pc-Builder"
                 className="inline-flex items-center gap-2 mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-container active:scale-[0.97] transition-all"
               >
                 {t("Launch PC Builder", "ابدأ بناء الكمبيوتر")}
