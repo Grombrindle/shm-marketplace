@@ -10,7 +10,7 @@ export type RouteConfig = {
 export const ROUTES: RouteConfig[] = [
     { key: "HOME", path: "/", en: "Home", ar: "الرئيسية" },
     { key: "CATALOG", path: "/catalog", en: "Catalog", ar: "المتجر" },
-    { key: "PC_BUILDER", path: "/pc-builder", en: "PC Builder", ar: "بناء الكمبيوتر" },
+    { key: "PC_BUILDER", path: "/Pc-Builder", en: "PC Builder", ar: "بناء الكمبيوتر" },
     { key: "SAVED_BUILDS", path: "/Saved-builds", en: "Saved Builds", ar: "التجميعات المحفوظة" },
     { key: "CONTACT", path: "/Contact", en: "Contact", ar: "تواصل معنا" },
 ];

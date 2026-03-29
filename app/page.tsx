@@ -1,3 +1,4 @@
+// app/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -100,14 +101,15 @@ export default function Home() {
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
-  const maxIndex = Math.max(0, featuredProducts.length - visibleCount);
-
   useEffect(() => {
     const timer = setInterval(() => {
+      const maxIndex = Math.max(0, featuredProducts.length - visibleCount);
       setSliderIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 4000);
     return () => clearInterval(timer);
-  }, [maxIndex]);
+  }, [visibleCount]);
+
+  const maxIndex = Math.max(0, featuredProducts.length - visibleCount);
 
   return (
     <>
@@ -124,40 +126,40 @@ export default function Home() {
         </div>
         <div className="container relative z-10">
           <div className="max-w-lg">
-            <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white animate-reveal-up"
-              style={{ lineHeight: 1.08 }}
-            >
-              {t("Build Your Dream PC", "ابنِ كمبيوترك المثالي")}
-            </h1>
-            <p
-              className="mt-5 text-lg text-white/65 max-w-md animate-reveal-up"
-              style={{ animationDelay: "120ms" }}
-            >
-              {t(
-                "Premium components, expert assembly, and reliable delivery across Syria.",
-                "مكونات متميزة، تجميع احترافي، وتوصيل موثوق في جميع أنحاء سوريا.",
-              )}
-            </p>
-            <div
-              className="mt-8 animate-reveal-up"
-              style={{ animationDelay: "240ms" }}
-            >
-              <Link
-                href={PC_BUILDER.path}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl shadow-elevation-2 hover:bg-primary-container active:scale-[0.97] transition-all"
+            <ScrollReveal delay={0} onceKey="home:hero:title">
+              <h1
+                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white"
+                style={{ lineHeight: 1.08 }}
               >
-                {t("Start Building", "ابدأ البناء")}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+                {t("Build Your Dream PC", "ابنِ كمبيوترك المثالي")}
+              </h1>
+            </ScrollReveal>
+            <ScrollReveal delay={120} onceKey="home:hero:desc">
+              <p className="mt-5 text-lg text-white/65 max-w-md">
+                {t(
+                  "Premium components, expert assembly, and reliable delivery across Syria.",
+                  "مكونات متميزة، تجميع احترافي، وتوصيل موثوق في جميع أنحاء سوريا.",
+                )}
+              </p>
+            </ScrollReveal>
+            <ScrollReveal delay={240} onceKey="home:hero:btn">
+              <div className="mt-8">
+                <Link
+                  href={PC_BUILDER.path}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl shadow-elevation-2 hover:bg-primary-container active:scale-[0.97] transition-all"
+                >
+                  {t("Start Building", "ابدأ البناء")}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
       <section className="py-16 lg:py-24">
         <div className="container">
-          <ScrollReveal>
+          <ScrollReveal onceKey="home:products:header">
             <div className="flex items-end justify-between mb-8">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-bold">
@@ -207,7 +209,10 @@ export default function Home() {
                     width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)`,
                   }}
                 >
-                  <ScrollReveal delay={i * 70}>
+                  <ScrollReveal
+                    delay={i * 70}
+                    onceKey={`home:product:${product.id}`}
+                  >
                     <div className="bg-card rounded-2xl p-5 shadow-elevation-1 hover:shadow-elevation-3 transition-shadow">
                       <div className="aspect-[4/3] bg-muted rounded-xl flex items-center justify-center text-5xl mb-4">
                         {product.emoji}
@@ -245,7 +250,7 @@ export default function Home() {
 
       <section className="py-16 lg:py-24 bg-muted/40">
         <div className="container">
-          <ScrollReveal>
+          <ScrollReveal onceKey="home:about:header">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-2xl sm:text-3xl font-bold">
                 {t("About SHM", "عن SHM")}
@@ -290,7 +295,11 @@ export default function Home() {
                 descAr: "ضمان كامل على جميع المكونات",
               },
             ].map((item, i) => (
-              <ScrollReveal key={i} delay={i * 90}>
+              <ScrollReveal
+                key={i}
+                delay={i * 90}
+                onceKey={`home:feature:${i}`}
+              >
                 <div className="bg-card rounded-2xl p-5 shadow-elevation-1 text-center hover:shadow-elevation-2 transition-shadow">
                   <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
                     <item.icon className="w-5 h-5" />
@@ -310,7 +319,7 @@ export default function Home() {
 
       <section className="py-16 lg:py-24">
         <div className="container">
-          <ScrollReveal>
+          <ScrollReveal onceKey="home:cta:box">
             <div className="bg-surface-high rounded-3xl p-10 md:p-16 text-center">
               <h2
                 className="text-3xl md:text-4xl font-bold text-surface-high-foreground"
