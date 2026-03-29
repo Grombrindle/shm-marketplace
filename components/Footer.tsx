@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { CATALOG, PC_BUILDER, CONTACT } from "@/lib/routes";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -27,7 +28,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm opacity-70">
               <li>
                 <Link
-                  href="/catalog"
+                  href={CATALOG.path}
                   className="hover:opacity-100 transition-opacity"
                 >
                   {t("All Products", "جميع المنتجات")}
@@ -35,7 +36,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/Pc-Builder"
+                  href={PC_BUILDER.path}
                   className="hover:opacity-100 transition-opacity"
                 >
                   {t("PC Builder", "بناء الكمبيوتر")}
@@ -43,7 +44,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href={CONTACT.path}
                   className="hover:opacity-100 transition-opacity"
                 >
                   {t("Contact Us", "تواصل معنا")}

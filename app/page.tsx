@@ -14,6 +14,7 @@ import {
   Truck,
   Shield,
 } from "lucide-react";
+import { PC_BUILDER, CATALOG } from "@/lib/routes";
 
 const featuredProducts = [
   {
@@ -85,9 +86,8 @@ const featuredProducts = [
 export default function Home() {
   const { t } = useLanguage();
   const [sliderIndex, setSliderIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4); // fallback, will update on client
+  const [visibleCount, setVisibleCount] = useState(4);
 
-  // Calculate visible count on client and on resize
   useEffect(() => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
@@ -102,7 +102,6 @@ export default function Home() {
 
   const maxIndex = Math.max(0, featuredProducts.length - visibleCount);
 
-  // Autoplay slider
   useEffect(() => {
     const timer = setInterval(() => {
       setSliderIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
@@ -112,7 +111,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero — clean and focused */}
       <section className="relative min-h-[80vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -146,7 +144,7 @@ export default function Home() {
               style={{ animationDelay: "240ms" }}
             >
               <Link
-                href="/Pc-Builder"
+                href={PC_BUILDER.path}
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl shadow-elevation-2 hover:bg-primary-container active:scale-[0.97] transition-all"
               >
                 {t("Start Building", "ابدأ البناء")}
@@ -157,7 +155,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product Slider */}
       <section className="py-16 lg:py-24">
         <div className="container">
           <ScrollReveal>
@@ -203,7 +200,7 @@ export default function Home() {
             >
               {featuredProducts.map((product, i) => (
                 <Link
-                  href="/catalog"
+                  href={CATALOG.path}
                   key={product.id}
                   className="shrink-0 group"
                   style={{
@@ -234,7 +231,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Slider dots - mobile */}
           <div className="flex justify-center gap-1.5 mt-6 sm:hidden">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
@@ -247,7 +243,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Us */}
       <section className="py-16 lg:py-24 bg-muted/40">
         <div className="container">
           <ScrollReveal>
@@ -313,7 +308,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA — Go Build */}
       <section className="py-16 lg:py-24">
         <div className="container">
           <ScrollReveal>
@@ -331,7 +325,7 @@ export default function Home() {
                 )}
               </p>
               <Link
-                href="/Pc-Builder"
+                href={PC_BUILDER.path}
                 className="inline-flex items-center gap-2 mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-container active:scale-[0.97] transition-all"
               >
                 {t("Launch PC Builder", "ابدأ بناء الكمبيوتر")}

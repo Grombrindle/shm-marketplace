@@ -14,6 +14,7 @@ import {
   Cpu,
 } from "lucide-react";
 import { toast } from "sonner";
+import { DYNAMIC_ROUTES } from "@/lib/routes";
 
 interface Product {
   id: number;
@@ -68,7 +69,6 @@ const brandsByCategory: Record<string, string[]> = {
 
 const socketOptions = ["AM5", "LGA1700"];
 
-// Helper to generate a URL-friendly slug from product name
 const slugify = (name: string) =>
   name
     .toLowerCase()
@@ -460,7 +460,6 @@ const CatalogPage = () => {
 
   const FilterPanel = () => (
     <div className="space-y-6">
-      {/* Categories */}
       <div>
         <h3 className="font-semibold text-sm mb-3">{t("Category", "الفئة")}</h3>
         <div className="space-y-1">
@@ -484,7 +483,6 @@ const CatalogPage = () => {
         </div>
       </div>
 
-      {/* Brands */}
       <div>
         <h3 className="font-semibold text-sm mb-3">
           {t("Brands", "العلامات التجارية")}
@@ -507,7 +505,6 @@ const CatalogPage = () => {
         </div>
       </div>
 
-      {/* Socket Filter */}
       {showSocketFilter && (
         <div>
           <h3 className="font-semibold text-sm mb-3">
@@ -543,7 +540,6 @@ const CatalogPage = () => {
         </div>
       )}
 
-      {/* Price Range */}
       <div>
         <h3 className="font-semibold text-sm mb-3">
           {t("Price Range", "نطاق السعر")}
@@ -563,7 +559,6 @@ const CatalogPage = () => {
         </div>
       </div>
 
-      {/* Clear Filters */}
       {hasActiveFilters && (
         <button
           onClick={clearAllFilters}
@@ -577,7 +572,6 @@ const CatalogPage = () => {
 
   return (
     <div className="container py-6 lg:py-10">
-      {/* Header */}
       <ScrollReveal>
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold">
@@ -592,7 +586,6 @@ const CatalogPage = () => {
         </div>
       </ScrollReveal>
 
-      {/* Search Bar */}
       <ScrollReveal>
         <div className="flex gap-3 mb-6">
           <div className="relative flex-1">
@@ -627,7 +620,6 @@ const CatalogPage = () => {
       </ScrollReveal>
 
       <div className="flex gap-8">
-        {/* Sidebar Filters (desktop) */}
         <aside className="hidden lg:block w-60 shrink-0">
           <ScrollReveal animation="slide-left">
             <div className="sticky top-24 bg-card rounded-2xl p-5 shadow-elevation-1 max-h-[calc(100vh-8rem)] overflow-y-auto">
@@ -636,7 +628,6 @@ const CatalogPage = () => {
           </ScrollReveal>
         </aside>
 
-        {/* Mobile filter sheet */}
         {filtersOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div
@@ -660,7 +651,6 @@ const CatalogPage = () => {
           </div>
         )}
 
-        {/* Product Grid */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-5">
             <p className="text-sm text-muted-foreground">
@@ -696,7 +686,7 @@ const CatalogPage = () => {
                         {t("Out of Stock", "غير متوفر")}
                       </span>
                     )}
-                    <Link href={`/catalog/${productSlug}`}>
+                    <Link href={DYNAMIC_ROUTES.PRODUCT_DETAIL(productSlug)}>
                       <div>
                         <div className="aspect-square bg-muted rounded-xl flex items-center justify-center mb-3">
                           <Cpu className="w-10 h-10 text-muted-foreground/30" />
@@ -726,7 +716,6 @@ const CatalogPage = () => {
                             disabled={!product.inStock}
                             onClick={(e) => {
                               e.preventDefault();
-                              // Add to cart logic here (to be implemented)
                               toast.info(
                                 t(
                                   "Add to cart coming soon",

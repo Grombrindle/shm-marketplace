@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Cpu, Trash2, ArrowRight, Package } from "lucide-react";
 import { toast } from "sonner";
+import { PC_BUILDER } from "@/lib/routes";
 
 interface SavedBuild {
   id: string;
@@ -43,8 +44,7 @@ const SavedBuildsPage = () => {
   };
 
   const openBuild = (build: SavedBuild) => {
-    // Pass build ID as query parameter
-    router.push(`/Pc-Builder?buildId=${build.id}`);
+    router.push(`${PC_BUILDER.path}?buildId=${build.id}`);
   };
 
   const partLabels: Record<string, { en: string; ar: string }> = {
@@ -88,7 +88,7 @@ const SavedBuildsPage = () => {
               )}
             </p>
             <button
-              onClick={() => router.push("/Pc-Builder")}
+              onClick={() => router.push(PC_BUILDER.path)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-container active:scale-[0.97] transition-all"
             >
               {t("Start Building", "ابدأ البناء")}

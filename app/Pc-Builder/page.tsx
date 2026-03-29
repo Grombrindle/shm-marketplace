@@ -21,8 +21,8 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { SAVED_BUILDS } from "@/lib/routes";
 
-// Types
 interface Component {
   id: string;
   name: string;
@@ -40,7 +40,6 @@ interface BuildStep {
   options: Component[];
 }
 
-// Step data
 const steps: BuildStep[] = [
   {
     key: "cpu",
@@ -305,7 +304,6 @@ const steps: BuildStep[] = [
   },
 ];
 
-// Helper functions
 const getPerformanceScore = (selections: Record<string, Component>) => {
   const cpu = selections.cpu;
   const gpu = selections.gpu;
@@ -313,15 +311,12 @@ const getPerformanceScore = (selections: Record<string, Component>) => {
   if (!cpu || !gpu || !ram) return null;
 
   let score = 0;
-  // CPU scoring
   if (cpu.id === "i9-14900k" || cpu.id === "r9-7950x") score += 95;
   else if (cpu.id === "i7-14700k") score += 85;
   else score += 80;
-  // GPU scoring
   if (gpu.id === "4080s" || gpu.id === "7900xtx") score += 95;
   else if (gpu.id === "4070s") score += 80;
   else score += 75;
-  // RAM scoring
   if (ram.id === "64gb-5600") score += 90;
   else if (ram.id === "32gb-6000") score += 85;
   else score += 75;
@@ -336,7 +331,6 @@ const getPerformanceTier = (score: number) => {
   return { en: "Mid-Range", ar: "متوسط", color: "text-muted-foreground" };
 };
 
-// Separate component that uses useSearchParams, wrapped in Suspense later
 function BuildLoader({
   onBuildLoaded,
 }: {
@@ -357,10 +351,9 @@ function BuildLoader({
     }
   }, [searchParams, onBuildLoaded]);
 
-  return null; // This component doesn't render anything
+  return null;
 }
 
-// Main component
 const PCBuilderPage = () => {
   const { t } = useLanguage();
 
@@ -369,7 +362,6 @@ const PCBuilderPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showPerformance, setShowPerformance] = useState(false);
 
-  // Handle loading a saved build from URL
   const handleBuildLoaded = (loadedSelections: Record<string, Component>) => {
     setSelections(loadedSelections);
   };
@@ -437,13 +429,11 @@ const PCBuilderPage = () => {
 
   return (
     <>
-      {/* Suspense boundary for useSearchParams */}
       <Suspense fallback={null}>
         <BuildLoader onBuildLoaded={handleBuildLoaded} />
       </Suspense>
 
       <div className="container py-6 lg:py-10">
-        {/* Header */}
         <ScrollReveal>
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -467,7 +457,6 @@ const PCBuilderPage = () => {
           </div>
         </ScrollReveal>
 
-        {/* Category Tabs */}
         <ScrollReveal>
           <div className="flex gap-1 overflow-x-auto pb-3 mb-6 -mx-1 px-1 scrollbar-none">
             {steps.map((s) => {
@@ -500,7 +489,6 @@ const PCBuilderPage = () => {
           </div>
         </ScrollReveal>
 
-        {/* Search / Filter for current tab */}
         <ScrollReveal>
           <div className="relative mb-5 max-w-md">
             <Search className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -517,7 +505,6 @@ const PCBuilderPage = () => {
           </div>
         </ScrollReveal>
 
-        {/* Parts Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-10">
           {filteredOptions.map((comp, i) => {
             const selected = selections[activeTab]?.id === comp.id;
@@ -582,7 +569,6 @@ const PCBuilderPage = () => {
           )}
         </div>
 
-        {/* Selected Parts Summary */}
         <ScrollReveal>
           <div className="bg-card rounded-2xl shadow-elevation-2 p-5 sm:p-6">
             <div className="flex items-center justify-between mb-5">
@@ -656,7 +642,6 @@ const PCBuilderPage = () => {
               })}
             </div>
 
-            {/* Performance Button */}
             <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
               <button
                 disabled={!canShowPerf}
@@ -675,7 +660,11 @@ const PCBuilderPage = () => {
                 </p>
               )}
               <button
-                onClick={saveBuild}
+                onClick={() => {
+                  saveBuild();
+                  // Optional: redirect to saved builds after save
+                  // router.push(SAVED_BUILDS.path);
+                }}
                 className="sm:hidden inline-flex items-center gap-2 px-5 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted active:scale-95 transition-all"
               >
                 <Save className="w-4 h-4" />
@@ -683,7 +672,6 @@ const PCBuilderPage = () => {
               </button>
             </div>
 
-            {/* Performance Display */}
             {showPerformance && perfScore && (
               <div className="mt-5 p-5 bg-muted/50 rounded-xl animate-reveal-up">
                 <h3 className="font-semibold mb-3">

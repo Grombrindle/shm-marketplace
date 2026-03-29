@@ -5,19 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, User, Menu, X, Globe, Bookmark } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const navLinks = [
-  { path: "/", en: "Home", ar: "الرئيسية" },
-  { path: "/catalog", en: "Catalog", ar: "المتجر" },
-  { path: "/Pc-Builder", en: "PC Builder", ar: "بناء الكمبيوتر" },
-  { path: "/saved-builds", en: "Saved Builds", ar: "التجميعات المحفوظة" },
-  { path: "/contact", en: "Contact", ar: "تواصل معنا" },
-];
+import { ROUTES, isActiveRoute, CATALOG, SAVED_BUILDS } from "@/lib/routes";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, toggle, lang } = useLanguage();
-  const pathname = usePathname(); // current route
+  const pathname = usePathname();
 
   return (
     <>
@@ -40,19 +33,19 @@ const Navbar = () => {
           </div>
 
           <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const active = pathname === link.path;
+            {ROUTES.map((route) => {
+              const active = isActiveRoute(pathname, route.path);
               return (
                 <Link
-                  key={link.path}
-                  href={link.path}
+                  key={route.key}
+                  href={route.path}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     active
                       ? "bg-primary text-primary-foreground"
                       : "hover:bg-white/10"
                   }`}
                 >
-                  {t(link.en, link.ar)}
+                  {t(route.en, route.ar)}
                 </Link>
               );
             })}
@@ -67,13 +60,13 @@ const Navbar = () => {
               {lang === "en" ? "عربي" : "EN"}
             </button>
             <Link
-              href="/catalog"
+              href={CATALOG.path}
               className="p-2 rounded-lg hover:bg-white/10 active:scale-95 transition-all"
             >
               <Search className="w-5 h-5" />
             </Link>
             <Link
-              href="/saved-builds"
+              href={SAVED_BUILDS.path}
               className="p-2 rounded-lg hover:bg-white/10 active:scale-95 transition-all"
             >
               <Bookmark className="w-5 h-5" />
@@ -100,12 +93,12 @@ const Navbar = () => {
               </button>
             </div>
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const active = pathname === link.path;
+              {ROUTES.map((route) => {
+                const active = isActiveRoute(pathname, route.path);
                 return (
                   <Link
-                    key={link.path}
-                    href={link.path}
+                    key={route.key}
+                    href={route.path}
                     onClick={() => setDrawerOpen(false)}
                     className={`px-4 py-3 rounded-lg font-medium transition-colors ${
                       active
@@ -113,7 +106,7 @@ const Navbar = () => {
                         : "hover:bg-muted"
                     }`}
                   >
-                    {t(link.en, link.ar)}
+                    {t(route.en, route.ar)}
                   </Link>
                 );
               })}

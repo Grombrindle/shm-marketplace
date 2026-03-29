@@ -21,9 +21,8 @@ import {
   CircuitBoard,
 } from "lucide-react";
 import { toast } from "sonner";
+import { CATALOG, PC_BUILDER, DYNAMIC_ROUTES } from "@/lib/routes";
 
-// Import the same product list from catalog (or define separately)
-// For simplicity, we'll define the products here; in a real app you'd import from a shared file.
 interface Product {
   id: number;
   name: string;
@@ -143,22 +142,17 @@ const allProducts: Product[] = [
     specs: "24C/32T, 3.2GHz",
     description: "Top-tier performance for extreme workloads and gaming.",
   },
-  // Add other products as needed; for brevity, we include only a few, but you can copy the rest from catalog page.
-  // ... (rest of the products)
 ];
 
-// Generate a slug from product name
 const slugify = (name: string) =>
   name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-// Create a map from slug to product
 const productMap: Record<string, Product> = {};
 allProducts.forEach((p) => {
   const slug = slugify(p.name);
-  // Handle duplicates by appending id if needed
   if (productMap[slug]) {
     productMap[`${slug}-${p.id}`] = p;
   } else {
@@ -166,7 +160,6 @@ allProducts.forEach((p) => {
   }
 });
 
-// Helper to get category icon
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case "CPUs":
@@ -194,11 +187,8 @@ const ProductDetailPage = () => {
   const { t, lang } = useLanguage();
   const params = useParams();
   const slug = params?.slug as string;
-
-  // Find product by slug
   const product = productMap[slug];
 
-  // If product not found, show 404-like message
   if (!product) {
     return (
       <div className="container py-20 text-center">
@@ -216,7 +206,7 @@ const ProductDetailPage = () => {
             )}
           </p>
           <Link
-            href="/catalog"
+            href={CATALOG.path}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary-container transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -227,9 +217,7 @@ const ProductDetailPage = () => {
     );
   }
 
-  // Add to builder: navigate to builder with product ID and category
   const addToBuilder = () => {
-    // Determine the component key (category mapping)
     const categoryMap: Record<string, string> = {
       CPUs: "cpu",
       GPUs: "gpu",
@@ -250,12 +238,6 @@ const ProductDetailPage = () => {
       );
       return;
     }
-
-    // Save to localStorage? Or navigate with query param to pre-select?
-    // We'll navigate to builder with query param for the product id.
-    // The builder page already reads from localStorage builds, but we need to pre-select a single component.
-    // Alternative: store a "tempSelection" in localStorage and clear after use.
-    // For simplicity, we'll store in sessionStorage and navigate.
     const tempSelections = JSON.parse(
       sessionStorage.getItem("shm-temp-selections") || "{}",
     );
@@ -264,16 +246,15 @@ const ProductDetailPage = () => {
       "shm-temp-selections",
       JSON.stringify(tempSelections),
     );
-    window.location.href = `/Pc-Builder?temp=${Date.now()}`; // hard navigation to avoid losing state
+    window.location.href = `${PC_BUILDER.path}?temp=${Date.now()}`;
   };
 
   return (
     <div className="container py-6 lg:py-10">
-      {/* Breadcrumb */}
       <ScrollReveal>
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
           <Link
-            href="/catalog"
+            href={CATALOG.path}
             className="hover:text-primary transition-colors"
           >
             {t("Catalog", "الكتالوج")}
@@ -284,7 +265,6 @@ const ProductDetailPage = () => {
       </ScrollReveal>
 
       <div className="grid md:grid-cols-2 gap-10">
-        {/* Product Image */}
         <ScrollReveal animation="slide-left">
           <div className="aspect-square bg-card rounded-2xl shadow-elevation-2 flex items-center justify-center p-8">
             <div className="w-full h-full bg-muted rounded-xl flex items-center justify-center">
@@ -293,7 +273,6 @@ const ProductDetailPage = () => {
           </div>
         </ScrollReveal>
 
-        {/* Product Info */}
         <ScrollReveal animation="slide-right">
           <div>
             <div className="flex items-start justify-between gap-4">
@@ -327,7 +306,6 @@ const ProductDetailPage = () => {
               )}
             </div>
 
-            {/* Specs */}
             <div className="space-y-3 mb-6">
               {product.specs && (
                 <div className="flex items-start gap-2 text-sm">
@@ -357,7 +335,6 @@ const ProductDetailPage = () => {
               )}
             </div>
 
-            {/* Description */}
             {product.description && (
               <div className="mb-6">
                 <h3 className="font-semibold mb-2">
@@ -369,7 +346,6 @@ const ProductDetailPage = () => {
               </div>
             )}
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <button
                 disabled={!product.inStock}
@@ -380,7 +356,7 @@ const ProductDetailPage = () => {
                 {t("Add to Builder", "أضف إلى المُنشئ")}
               </button>
               <Link
-                href="/Pc-Builder"
+                href={PC_BUILDER.path}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border rounded-xl font-medium hover:bg-muted active:scale-[0.97] transition-all"
               >
                 {t("Go to Builder", "اذهب إلى المُنشئ")}
@@ -401,7 +377,6 @@ const ProductDetailPage = () => {
         </ScrollReveal>
       </div>
 
-      {/* Related Products (optional) */}
       <ScrollReveal>
         <div className="mt-16">
           <h2 className="text-xl font-bold mb-6">
@@ -413,34 +388,37 @@ const ProductDetailPage = () => {
                 (p) => p.category === product.category && p.id !== product.id,
               )
               .slice(0, 4)
-              .map((related) => (
-                <Link
-                  key={related.id}
-                  href={`/catalog/${slugify(related.name)}`}
-                  className="group bg-card rounded-xl p-4 shadow-elevation-1 hover:shadow-elevation-2 transition-shadow"
-                >
-                  <div className="aspect-square bg-muted rounded-lg flex items-center justify-center mb-3">
-                    {getCategoryIcon(related.category)}
-                  </div>
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase">
-                    {related.brand}
-                  </span>
-                  <h3 className="font-semibold text-sm mt-0.5 line-clamp-2">
-                    {related.name}
-                  </h3>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="font-bold text-sm tabular-nums">
-                      ${related.price}
-                    </span>
-                    <div className="flex items-center gap-0.5">
-                      <Star className="w-3 h-3 fill-primary text-primary" />
-                      <span className="text-xs text-muted-foreground">
-                        {related.rating}
-                      </span>
+              .map((related) => {
+                const relatedSlug = slugify(related.name);
+                return (
+                  <Link
+                    key={related.id}
+                    href={DYNAMIC_ROUTES.PRODUCT_DETAIL(relatedSlug)}
+                    className="group bg-card rounded-xl p-4 shadow-elevation-1 hover:shadow-elevation-2 transition-shadow"
+                  >
+                    <div className="aspect-square bg-muted rounded-lg flex items-center justify-center mb-3">
+                      {getCategoryIcon(related.category)}
                     </div>
-                  </div>
-                </Link>
-              ))}
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase">
+                      {related.brand}
+                    </span>
+                    <h3 className="font-semibold text-sm mt-0.5 line-clamp-2">
+                      {related.name}
+                    </h3>
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="font-bold text-sm tabular-nums">
+                        ${related.price}
+                      </span>
+                      <div className="flex items-center gap-0.5">
+                        <Star className="w-3 h-3 fill-primary text-primary" />
+                        <span className="text-xs text-muted-foreground">
+                          {related.rating}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </ScrollReveal>
